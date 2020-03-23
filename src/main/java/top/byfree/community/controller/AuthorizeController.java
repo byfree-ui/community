@@ -1,17 +1,18 @@
-package top.byfree.community.community.controller;
+package top.byfree.community.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import top.byfree.community.community.dto.AccessTokenDTO;
-import top.byfree.community.community.dto.GithubUser;
-import top.byfree.community.community.mapper.userMapper;
-import top.byfree.community.community.model.User;
-import top.byfree.community.community.provider.GithubProvider;
+import top.byfree.community.dto.AccessTokenDTO;
+import top.byfree.community.dto.GithubUser;
+import top.byfree.community.model.User;
+import top.byfree.community.provider.GithubProvider;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.UUID;
 
 @Controller
@@ -26,12 +27,13 @@ public class AuthorizeController {
     @Value("${github.redirect.uri}")
     private String redirectUri;
     @Autowired
-    private userMapper userMapper;
+    private top.byfree.community.mapper.userMapper userMapper;
 
     @GetMapping("/callback")
     public String callback(@RequestParam(name = "code") String code,
                            @RequestParam(name = "state") String state,
-                           HttpServletRequest request) {
+                           HttpServletRequest request,
+                           HttpServletResponse response) {
         // 创建AccessTokenDTO类的实例
         AccessTokenDTO accessTokenDTO = new AccessTokenDTO();
         // 设置各种属性
@@ -48,7 +50,9 @@ public class AuthorizeController {
         if (githubUser != null) {
             // 封装一个User对象
             User user = new User();
-            user.setToken(UUID.randomUUID().toString());
+            // 使用这个token代替session
+            String token = UUID.randomUUID().toString();
+            user.setToken(token);
             user.setName(githubUser.getName());
             user.setAccountId(String.valueOf(githubUser.getId()));
             user.setGmtCreate(System.currentTimeMillis());
@@ -56,7 +60,8 @@ public class AuthorizeController {
             // userMapper：向数据库中写如user
             userMapper.insert(user);
             // 写cookie，和session
-            request.getSession().setAttribute("user", githubUser);
+            response.addCookie(new Cookie("token", token));
+
             // 重定向
             return "redirect:/";
         } else {

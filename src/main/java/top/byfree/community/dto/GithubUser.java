@@ -1,4 +1,4 @@
-package top.byfree.community.community.dto;
+package top.byfree.community.dto;
 
 public class GithubUser {
     private String name;

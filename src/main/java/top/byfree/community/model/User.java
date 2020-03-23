@@ -1,4 +1,4 @@
-package top.byfree.community.community.model;
+package top.byfree.community.model;
 
 public class User {
     private Integer id;

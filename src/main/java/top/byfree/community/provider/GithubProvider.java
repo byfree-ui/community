@@ -1,10 +1,10 @@
-package top.byfree.community.community.provider;
+package top.byfree.community.provider;
 
 import com.alibaba.fastjson.JSON;
 import okhttp3.*;
 import org.springframework.stereotype.Component;
-import top.byfree.community.community.dto.AccessTokenDTO;
-import top.byfree.community.community.dto.GithubUser;
+import top.byfree.community.dto.AccessTokenDTO;
+import top.byfree.community.dto.GithubUser;
 
 import java.io.IOException;
 

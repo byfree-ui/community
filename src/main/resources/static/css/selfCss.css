@@ -1,0 +1,17 @@
+body {
+    background-color: #efefef;
+}
+
+.main {
+    margin: 30px;
+    padding: 15px;
+}
+
+.right-bottom {
+    float: right;
+    margin-bottom: 15px;
+}
+
+.bag {
+    background-color: white;
+}

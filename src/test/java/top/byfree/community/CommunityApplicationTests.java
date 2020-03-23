@@ -1,4 +1,4 @@
-package top.byfree.community.community;
+package top.byfree.community;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
